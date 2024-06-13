@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Contacto</h1>
+        </header>
+        <main>
+            <form id="contact-form" action="mailto:tu-email@example.com" method="post" enctype="text/plain">
+                <label for="contact-name">Nombre:</label>
+                <input type="text" id="contact-name" name="name" required>
+                <label for="contact-email">Email:</label>
+                <input type="email" id="contact-email" name="email" required>
+                <label for="contact-message">Mensaje:</label>
+                <textarea id="contact-message" name="message" required></textarea>
+                <button type="submit">Enviar</button>
+            </form>
+        </main>
+    </div>
+    <script src="js/validaciones.js"></script>
+</body>
+</html>
