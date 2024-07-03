@@ -79,6 +79,31 @@ function selectLetter(event) {
         lastCell.classList.add("last-selected");
     }
     event.target.classList.add("current-selected");
+
+    updateCellColors();
+}
+
+function updateCellColors() {
+    var cells = document.querySelectorAll("#board div");
+    cells.forEach(function(cell) {
+        var index = parseInt(cell.dataset.index);
+        cell.classList.remove("adjacent", "non-adjacent");
+
+        if (selectedLetters.includes(index)) {
+            return;
+        }
+
+        if (selectedLetters.length === 0) {
+            cell.classList.add("non-adjacent");
+        } else {
+            var lastSelectedIndex = selectedLetters[selectedLetters.length - 1];
+            if (isAdjacent(lastSelectedIndex, index)) {
+                cell.classList.add("adjacent");
+            } else {
+                cell.classList.add("non-adjacent");
+            }
+        }
+    });
 }
 
 function isAdjacent(index1, index2) {
@@ -172,6 +197,7 @@ function validateWord() {
     });
 }
 
+
 function resetCurrentWord() {
     currentWord = "";
     selectedLetters = [];
@@ -181,6 +207,8 @@ function resetCurrentWord() {
     cells.forEach(function(cell) {
         cell.classList.remove("selected", "last-selected", "current-selected");
     });
+
+    updateCellColors();
 }
 
 function updateScore(word) {

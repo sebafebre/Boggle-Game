@@ -131,3 +131,12 @@ button {
     text-decoration: none;
     cursor: pointer;
 }
+
+.adjacent {
+    background-color: green;
+}
+
+.non-adjacent {
+    background-color: gray;
+}
+
