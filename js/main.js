@@ -27,7 +27,11 @@ function initGame() {
 
     // Iniciar el temporizador
     var timerDuration = parseInt(document.getElementById("timer-select").value) * 60;
-    startTimer(timerDuration);
+    // Obtener el elemento donde se mostrará el temporizador
+    var timerDisplay = document.getElementById("timer"); // Asegúrate de tener un elemento con ID "timer" en tu HTML
+
+    // Iniciar el temporizador
+    startTimer(timerDuration, timerDisplay);
 
     // Limpiar el área de palabras encontradas y el puntaje
     document.getElementById("found-words").textContent = "";
@@ -119,14 +123,29 @@ function isAdjacent(index1, index2) {
     return Math.abs(row1 - row2) <= 1 && Math.abs(col1 - col2) <= 1;
 }
 
-function startTimer(duration) {
-    timer = duration;
-    displayTimer();
-    timerInterval = setInterval(function() {
-        timer--;
-        displayTimer();
-        if (timer <= 0) {
+function startTimer(duration, display) {
+    var timer = duration, minutes, seconds;
+    var timerInterval = setInterval(function() {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        // Actualizar el texto del temporizador en el elemento display
+        display.textContent = minutes + ":" + seconds;
+
+        // Cambiar el color del temporizador a rojo cuando llegue a 10 segundos o menos
+        if (timer <= 10) {
+            display.style.color = "#ff0000"; // Color rojo
+        } else {
+            display.style.color = "#000000"; // Color predeterminado (negro)
+        }
+
+        // Finalizar el juego cuando el temporizador llegue a cero
+        if (--timer < 0) {
             clearInterval(timerInterval);
+            display.textContent = "00:00";
             endGame();
         }
     }, 1000);
