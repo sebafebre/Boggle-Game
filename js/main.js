@@ -74,11 +74,15 @@ function selectLetter(event) {
 
     // Mostrar las letras seleccionadas en el tablero
     event.target.classList.add("selected");
-    if (selectedLetters.length > 1) {
-        var lastCell = document.querySelector("[data-index='" + lastSelectedIndex + "']");
-        lastCell.classList.add("last-selected");
+
+    // Quitar el borde especial de la letra anteriormente seleccionada
+    var previousLastSelected = document.querySelector(".last-selected");
+    if (previousLastSelected) {
+        previousLastSelected.classList.remove("last-selected");
     }
-    event.target.classList.add("current-selected");
+
+    // Agregar el borde especial a la última letra seleccionada
+    event.target.classList.add("last-selected");
 
     updateCellColors();
 }
