@@ -3,7 +3,7 @@
 // Variables globales
 var board, currentWord, foundWords, timer, score, timerInterval, playerName;
 var selectedLetters = [];
-
+var gameOver = false;
 // Inicialización del juego
 document.getElementById("start-game").addEventListener("click", function() {
     playerName = document.getElementById("player-name").value;
@@ -21,7 +21,8 @@ function initGame() {
     foundWords = [];
     score = 0;
     selectedLetters = [];
-    
+    var gameOver = false;
+
     // Mostrar el tablero
     displayBoard();
 
@@ -157,11 +158,38 @@ function displayTimer() {
     document.getElementById("timer").textContent = minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
 }
 
+/*
 function endGame() {
     alert("¡Tiempo terminado!");
     // Mostrar puntaje final y palabras encontradas
     document.getElementById("score").textContent = "Puntaje: " + score;
     document.getElementById("found-words").textContent = "Palabras encontradas: " + foundWords.join(", ");
+}*/
+
+function endGame() {
+    if (!gameOver) { // Verificar si el juego ya ha terminado para evitar guardar múltiples veces
+        gameOver = true;
+
+        // Guardar resultado de la partida
+        var currentDate = new Date();
+        var gameResult = {
+            playerName: playerName,
+            score: score,
+            dateTime: currentDate.toLocaleString()
+        };
+
+        // Obtener los resultados guardados previamente o inicializar un arreglo vacío
+        var gameResults = JSON.parse(localStorage.getItem("gameResults")) || [];
+
+        // Agregar el nuevo resultado al arreglo de resultados
+        gameResults.push(gameResult);
+
+        // Guardar los resultados actualizados en LocalStorage
+        localStorage.setItem("gameResults", JSON.stringify(gameResults));
+
+        // Redireccionar a la página de resultados
+        window.location.href = "resultado.html";
+    }
 }
 
 // Función para validar palabra usando la API del DLE
