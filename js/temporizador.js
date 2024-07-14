@@ -1,5 +1,5 @@
 "use strict";
-
+/*
 function startTimer(duration, display) {
     var timer = duration, minutes, seconds;
     var timerInterval = setInterval(function() {
@@ -17,4 +17,4 @@ function startTimer(duration, display) {
             endGame();
         }
     }, 1000);
-}
+}*/

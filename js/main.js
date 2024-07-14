@@ -3,7 +3,7 @@
 // Variables globales
 var board, currentWord, foundWords, timer, score, timerInterval, playerName;
 var selectedLetters = [];
-
+var gameOver = false;
 // Inicialización del juego
 document.getElementById("start-game").addEventListener("click", function() {
     playerName = document.getElementById("player-name").value;
@@ -21,13 +21,18 @@ function initGame() {
     foundWords = [];
     score = 0;
     selectedLetters = [];
-    
+    var gameOver = false;
+
     // Mostrar el tablero
     displayBoard();
 
     // Iniciar el temporizador
     var timerDuration = parseInt(document.getElementById("timer-select").value) * 60;
-    startTimer(timerDuration);
+    // Obtener el elemento donde se mostrará el temporizador
+    var timerDisplay = document.getElementById("timer"); // Asegúrate de tener un elemento con ID "timer" en tu HTML
+
+    // Iniciar el temporizador
+    startTimer(timerDuration, timerDisplay);
 
     // Limpiar el área de palabras encontradas y el puntaje
     document.getElementById("found-words").textContent = "";
@@ -74,11 +79,15 @@ function selectLetter(event) {
 
     // Mostrar las letras seleccionadas en el tablero
     event.target.classList.add("selected");
-    if (selectedLetters.length > 1) {
-        var lastCell = document.querySelector("[data-index='" + lastSelectedIndex + "']");
-        lastCell.classList.add("last-selected");
+
+    // Quitar el borde especial de la letra anteriormente seleccionada
+    var previousLastSelected = document.querySelector(".last-selected");
+    if (previousLastSelected) {
+        previousLastSelected.classList.remove("last-selected");
     }
-    event.target.classList.add("current-selected");
+
+    // Agregar el borde especial a la última letra seleccionada
+    event.target.classList.add("last-selected");
 
     updateCellColors();
 }
@@ -115,14 +124,29 @@ function isAdjacent(index1, index2) {
     return Math.abs(row1 - row2) <= 1 && Math.abs(col1 - col2) <= 1;
 }
 
-function startTimer(duration) {
-    timer = duration;
-    displayTimer();
-    timerInterval = setInterval(function() {
-        timer--;
-        displayTimer();
-        if (timer <= 0) {
+function startTimer(duration, display) {
+    var timer = duration, minutes, seconds;
+    var timerInterval = setInterval(function() {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        // Actualizar el texto del temporizador en el elemento display
+        display.textContent = minutes + ":" + seconds;
+
+        // Cambiar el color del temporizador a rojo cuando llegue a 10 segundos o menos
+        if (timer <= 10) {
+            display.style.color = "#ff0000"; // Color rojo
+        } else {
+            display.style.color = "#000000"; // Color predeterminado (negro)
+        }
+
+        // Finalizar el juego cuando el temporizador llegue a cero
+        if (--timer < 0) {
             clearInterval(timerInterval);
+            display.textContent = "00:00";
             endGame();
         }
     }, 1000);
@@ -134,11 +158,38 @@ function displayTimer() {
     document.getElementById("timer").textContent = minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
 }
 
+/*
 function endGame() {
     alert("¡Tiempo terminado!");
     // Mostrar puntaje final y palabras encontradas
     document.getElementById("score").textContent = "Puntaje: " + score;
     document.getElementById("found-words").textContent = "Palabras encontradas: " + foundWords.join(", ");
+}*/
+
+function endGame() {
+    if (!gameOver) { // Verificar si el juego ya ha terminado para evitar guardar múltiples veces
+        gameOver = true;
+
+        // Guardar resultado de la partida
+        var currentDate = new Date();
+        var gameResult = {
+            playerName: playerName,
+            score: score,
+            dateTime: currentDate.toLocaleString()
+        };
+
+        // Obtener los resultados guardados previamente o inicializar un arreglo vacío
+        var gameResults = JSON.parse(localStorage.getItem("gameResults")) || [];
+
+        // Agregar el nuevo resultado al arreglo de resultados
+        gameResults.push(gameResult);
+
+        // Guardar los resultados actualizados en LocalStorage
+        localStorage.setItem("gameResults", JSON.stringify(gameResults));
+
+        // Redireccionar a la página de resultados
+        window.location.href = "resultado.html";
+    }
 }
 
 // Función para validar palabra usando la API del DLE

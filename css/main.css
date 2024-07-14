@@ -23,22 +23,49 @@ body {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 800px; /* Ajusta el ancho máximo según sea necesario */
+    margin: 20px;
 }
 
 header {
     margin-bottom: 20px;
 }
 
-#game-config {
+#player-info {
+    width: 100%;
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
 }
 
-#board-container {
+#player-name {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 200px;
+}
+
+#start-game {
+    padding: 8px 16px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+#start-game:hover {
+    background-color: #45a049;
+}
+
+main {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
     margin-bottom: 20px;
 }
 
@@ -49,7 +76,7 @@ header {
     gap: 5px;
 }
 
-#board div {
+.board div {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -65,38 +92,30 @@ header {
     margin: 10px 0;
 }
 
-button {
-    margin-top: 10px;
-    padding: 5px 10px;
+#timer-select {
+    padding: 8px;
     font-size: 16px;
-    cursor: pointer;
+    border-radius: 5px;
 }
 
-.board-cell {
-    width: 50px;
-    height: 50px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #000000;
-    cursor: pointer;
-    font-size: 24px;
-    user-select: none;
+aside#word-list {
+    width: 200px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
-.selected {
-    background-color: #dcdcdc;
+#word-list h2 {
+    margin-bottom: 10px;
+    font-size: 18px;
 }
 
-.last-selected {
-    border: 1px solid #000000;
+#found-words {
+    margin-top: 10px;
+    line-height: 1.5;
 }
 
-.current-selected {
-    border: 2px solid #ff0000;
-}
-
-/* Estilos para el modal */
 .modal {
     display: none;
     position: fixed;
@@ -138,5 +157,12 @@ button {
 
 .non-adjacent {
     background-color: gray;
+}
+
+
+
+#board > div.board-cell.selected.last-selected {
+    border: 4px solid #f00; 
+    border-radius: 5px; 
 }
 
