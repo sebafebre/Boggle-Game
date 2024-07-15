@@ -227,3 +227,34 @@ section#word-list {
     font-size: 20px;
     text-align: center;
 }
+
+
+table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+
+
+#game-over-modal button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #019090;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
