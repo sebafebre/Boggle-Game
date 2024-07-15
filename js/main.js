@@ -8,9 +8,14 @@ var gameOver = false;
 document.getElementById("start-game").addEventListener("click", function() {
     playerName = document.getElementById("player-name").value;
     if (playerName.length < 3) {
-        alert("El nombre del jugador debe tener al menos 3 letras.");
+        showMessageModal("El nombre del jugador debe tener al menos 3 letras.");
         return;
     }
+
+    if (timerInterval) {
+        clearInterval(timerInterval);
+    }
+
     initGame();
 });
 
@@ -31,8 +36,8 @@ function initGame() {
     // Obtener el elemento donde se mostrará el temporizador
     var timerDisplay = document.getElementById("timer"); // Asegúrate de tener un elemento con ID "timer" en tu HTML
 
-    // Iniciar el temporizador
-    startTimer(timerDuration, timerDisplay);
+    // Iniciar el temporizador y almacenar el intervalo en timerInterval
+    timerInterval = startTimer(timerDuration, timerDisplay);
 
     // Limpiar el área de palabras encontradas y el puntaje
     document.getElementById("found-words").textContent = "";
@@ -126,7 +131,7 @@ function isAdjacent(index1, index2) {
 
 function startTimer(duration, display) {
     var timer = duration, minutes, seconds;
-    var timerInterval = setInterval(function() {
+    return setInterval(function() {
         minutes = parseInt(timer / 60, 10);
         seconds = parseInt(timer % 60, 10);
 
@@ -151,6 +156,7 @@ function startTimer(duration, display) {
         }
     }, 1000);
 }
+
 
 function displayTimer() {
     var minutes = Math.floor(timer / 60);
@@ -178,17 +184,15 @@ function endGame() {
             dateTime: currentDate.toLocaleString()
         };
 
-        // Obtener los resultados guardados previamente o inicializar un arreglo vacío
-        var gameResults = JSON.parse(localStorage.getItem("gameResults")) || [];
-
         // Agregar el nuevo resultado al arreglo de resultados
         gameResults.push(gameResult);
 
         // Guardar los resultados actualizados en LocalStorage
         localStorage.setItem("gameResults", JSON.stringify(gameResults));
 
-        // Redireccionar a la página de resultados
-        window.location.href = "resultado.html";
+        // Actualizar los resultados ordenados y mostrar el modal
+        sortedResults = gameResults.slice(0); // Copia los resultados para no modificar el original directamente
+        openResultsModal();
     }
 }
 
@@ -222,13 +226,13 @@ document.addEventListener("keypress", function(event) {
 
 function validateWord() {
     if (currentWord.length < 3) {
-        alert("La palabra debe tener al menos 3 letras.");
+        showMessageModal("La palabra debe tener al menos 3 letras.");
         resetCurrentWord();
         return;
     }
 
     if (foundWords.includes(currentWord)) {
-        alert("La palabra ya ha sido encontrada.");
+        showMessageModal("La palabra ya ha sido encontrada.");
         resetCurrentWord();
         return;
     }
@@ -239,7 +243,7 @@ function validateWord() {
             updateScore(currentWord);
             document.getElementById("found-words").textContent = "Palabras encontradas: " + foundWords.join(", ");
         } else {
-            alert("La palabra no es válida.");
+            showMessageModal("La palabra no es válida.");
             // Penalización
             score -= 1;
             document.getElementById("score").textContent = "Puntaje: " + score;
@@ -273,3 +277,158 @@ function updateScore(word) {
     score += points;
     document.getElementById("score").textContent = "Puntaje: " + score;
 }
+
+
+
+
+// Función para mostrar el modal de mensajes
+function showMessageModal(message) {
+    var modal = document.getElementById("message-modal");
+    var messageText = document.getElementById("message-text");
+    var closeButton = document.getElementById("close-message-modal");
+
+    messageText.textContent = message;
+    modal.style.display = "block";
+
+    closeButton.onclick = function() {
+        modal.style.display = "none";
+    };
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    };
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+
+
+
+// Variables globales para mantener el estado del ordenamiento
+var currentSortField = null;
+var isAscending = true;
+
+// Recuperar resultados del LocalStorage
+var gameResults = JSON.parse(localStorage.getItem("gameResults")) || [];
+var sortedResults = gameResults.slice(0); // Copia los resultados para no modificar el original directamente
+var tableBody = document.getElementById("results-table");
+
+// Función para llenar la tabla con los resultados
+function fillTable(results) {
+    tableBody.innerHTML = "";
+
+    results.forEach(function(result) {
+        var row = document.createElement("tr");
+        row.innerHTML = "<td>" + result.playerName + "</td>" +
+                        "<td class='score'>" + result.score + "</td>" +
+                        "<td class='dateTime'>" + result.dateTime + "</td>";
+        tableBody.appendChild(row);
+    });
+}
+
+
+
+
+// Asignar eventos al botón de Ranking en el header y al botón de Volver al inicio en el modal
+document.getElementById("button").addEventListener("click", openResultsModal);
+document.getElementById("close-modal").addEventListener("click", closeModal);
+
+// Función para volver al inicio
+function goToHome() {
+    window.location.href = "index.html"; // Reemplazar con el nombre de tu página inicial
+}
+
+
+function sortTable(field) {
+    // Si se hace clic en el mismo campo de ordenamiento, alternar entre ascendente y descendente
+    if (currentSortField === field) {
+        isAscending = !isAscending; // Cambia el tipo de orden
+    } else {
+        currentSortField = field; // Establece el nuevo campo de ordenamiento
+        isAscending = true; // Por defecto, comienza con orden ascendente
+    }
+
+    // Ordena los resultados según el campo y tipo de ordenamiento actual
+    if (field === 'score') {
+        sortedResults.sort(function(a, b) {
+            return isAscending ? a.score - b.score : b.score - a.score;
+        });
+    } else if (field === 'dateTime') {
+        sortedResults.sort(function(a, b) {
+            var dateA = parseDate(a.dateTime);
+            var dateB = parseDate(b.dateTime);
+            var comparison = dateA - dateB;
+            return isAscending ? comparison : -comparison;
+        });
+    }
+
+    // Llena la tabla con los resultados ordenados
+    fillTable(sortedResults);
+}
+
+// Función para parsear la fecha en el formato correcto
+function parseDate(dateTimeString) {
+    var parts = dateTimeString.split(", ");
+    var dateParts = parts[0].split("/");
+    var timeParts = parts[1].split(":");
+    return new Date(
+        dateParts[2],    // Año
+        dateParts[1] - 1, // Mes (0-indexed en JavaScript)
+        dateParts[0],    // Día
+        timeParts[0],    // Hora
+        timeParts[1],    // Minuto
+        timeParts[2]     // Segundo
+    );
+}
+
+
+
+// Función para abrir el modal de resultados
+function openResultsModal() {
+    var modal = document.getElementById("game-over-modal");
+    modal.style.display = "block";
+
+    // Recuperar resultados del LocalStorage
+    gameResults = JSON.parse(localStorage.getItem("gameResults")) || [];
+    sortedResults = gameResults.slice(0); // Copia los resultados para no modificar el original directamente
+
+    // Llenar la tabla con los resultados almacenados
+    fillTable(sortedResults);
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    };
+}
+// Función para cerrar el modal
+function closeModal() {
+    var modal = document.getElementById("game-over-modal");
+    modal.style.display = "none";
+}
+
+
+
+
+
+
+
+
+
+
+
+
