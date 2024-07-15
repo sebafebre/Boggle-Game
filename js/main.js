@@ -8,7 +8,7 @@ var gameOver = false;
 document.getElementById("start-game").addEventListener("click", function() {
     playerName = document.getElementById("player-name").value;
     if (playerName.length < 3) {
-        alert("El nombre del jugador debe tener al menos 3 letras.");
+        showMessageModal("El nombre del jugador debe tener al menos 3 letras.");
         return;
     }
     initGame();
@@ -222,13 +222,13 @@ document.addEventListener("keypress", function(event) {
 
 function validateWord() {
     if (currentWord.length < 3) {
-        alert("La palabra debe tener al menos 3 letras.");
+        showMessageModal("La palabra debe tener al menos 3 letras.");
         resetCurrentWord();
         return;
     }
 
     if (foundWords.includes(currentWord)) {
-        alert("La palabra ya ha sido encontrada.");
+        showMessageModal("La palabra ya ha sido encontrada.");
         resetCurrentWord();
         return;
     }
@@ -239,7 +239,7 @@ function validateWord() {
             updateScore(currentWord);
             document.getElementById("found-words").textContent = "Palabras encontradas: " + foundWords.join(", ");
         } else {
-            alert("La palabra no es válida.");
+            showMessageModal("La palabra no es válida.");
             // Penalización
             score -= 1;
             document.getElementById("score").textContent = "Puntaje: " + score;
@@ -272,4 +272,33 @@ function updateScore(word) {
     else if (length >= 8) points = 11;
     score += points;
     document.getElementById("score").textContent = "Puntaje: " + score;
+}
+
+
+
+
+
+
+
+
+
+// Función para mostrar el modal de mensajes
+function showMessageModal(message) {
+    var modal = document.getElementById("message-modal");
+    var messageText = document.getElementById("message-text");
+    var closeButton = document.getElementById("close-message-modal");
+
+    messageText.textContent = message;
+    modal.style.display = "block";
+
+    closeButton.onclick = function() {
+        modal.style.display = "none";
+    };
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    };
+
 }
