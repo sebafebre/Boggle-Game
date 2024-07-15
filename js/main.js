@@ -3,14 +3,19 @@
 // Variables globales
 var board, currentWord, foundWords, timer, score, timerInterval, playerName;
 var selectedLetters = [];
-
+var gameOver = false;
 // Inicialización del juego
 document.getElementById("start-game").addEventListener("click", function() {
     playerName = document.getElementById("player-name").value;
     if (playerName.length < 3) {
-        alert("El nombre del jugador debe tener al menos 3 letras.");
+        showMessageModal("El nombre del jugador debe tener al menos 3 letras.");
         return;
     }
+
+    if (timerInterval) {
+        clearInterval(timerInterval);
+    }
+
     initGame();
 });
 
@@ -21,13 +26,18 @@ function initGame() {
     foundWords = [];
     score = 0;
     selectedLetters = [];
-    
+    var gameOver = false;
+
     // Mostrar el tablero
     displayBoard();
 
     // Iniciar el temporizador
     var timerDuration = parseInt(document.getElementById("timer-select").value) * 60;
-    startTimer(timerDuration);
+    // Obtener el elemento donde se mostrará el temporizador
+    var timerDisplay = document.getElementById("timer"); // Asegúrate de tener un elemento con ID "timer" en tu HTML
+
+    // Iniciar el temporizador y almacenar el intervalo en timerInterval
+    timerInterval = startTimer(timerDuration, timerDisplay);
 
     // Limpiar el área de palabras encontradas y el puntaje
     document.getElementById("found-words").textContent = "";
@@ -74,11 +84,40 @@ function selectLetter(event) {
 
     // Mostrar las letras seleccionadas en el tablero
     event.target.classList.add("selected");
-    if (selectedLetters.length > 1) {
-        var lastCell = document.querySelector("[data-index='" + lastSelectedIndex + "']");
-        lastCell.classList.add("last-selected");
+
+    // Quitar el borde especial de la letra anteriormente seleccionada
+    var previousLastSelected = document.querySelector(".last-selected");
+    if (previousLastSelected) {
+        previousLastSelected.classList.remove("last-selected");
     }
-    event.target.classList.add("current-selected");
+
+    // Agregar el borde especial a la última letra seleccionada
+    event.target.classList.add("last-selected");
+
+    updateCellColors();
+}
+
+function updateCellColors() {
+    var cells = document.querySelectorAll("#board div");
+    cells.forEach(function(cell) {
+        var index = parseInt(cell.dataset.index);
+        cell.classList.remove("adjacent", "non-adjacent");
+
+        if (selectedLetters.includes(index)) {
+            return;
+        }
+
+        if (selectedLetters.length === 0) {
+            cell.classList.add("non-adjacent");
+        } else {
+            var lastSelectedIndex = selectedLetters[selectedLetters.length - 1];
+            if (isAdjacent(lastSelectedIndex, index)) {
+                cell.classList.add("adjacent");
+            } else {
+                cell.classList.add("non-adjacent");
+            }
+        }
+    });
 }
 
 function isAdjacent(index1, index2) {
@@ -90,18 +129,34 @@ function isAdjacent(index1, index2) {
     return Math.abs(row1 - row2) <= 1 && Math.abs(col1 - col2) <= 1;
 }
 
-function startTimer(duration) {
-    timer = duration;
-    displayTimer();
-    timerInterval = setInterval(function() {
-        timer--;
-        displayTimer();
-        if (timer <= 0) {
+function startTimer(duration, display) {
+    var timer = duration, minutes, seconds;
+    return setInterval(function() {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        // Actualizar el texto del temporizador en el elemento display
+        display.textContent = minutes + ":" + seconds;
+
+        // Cambiar el color del temporizador a rojo cuando llegue a 10 segundos o menos
+        if (timer <= 10) {
+            display.style.color = "#ff0000"; // Color rojo
+        } else {
+            display.style.color = "#000000"; // Color predeterminado (negro)
+        }
+
+        // Finalizar el juego cuando el temporizador llegue a cero
+        if (--timer < 0) {
             clearInterval(timerInterval);
+            display.textContent = "00:00";
             endGame();
         }
     }, 1000);
 }
+
 
 function displayTimer() {
     var minutes = Math.floor(timer / 60);
@@ -109,11 +164,36 @@ function displayTimer() {
     document.getElementById("timer").textContent = minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
 }
 
+/*
 function endGame() {
     alert("¡Tiempo terminado!");
     // Mostrar puntaje final y palabras encontradas
     document.getElementById("score").textContent = "Puntaje: " + score;
     document.getElementById("found-words").textContent = "Palabras encontradas: " + foundWords.join(", ");
+}*/
+
+function endGame() {
+    if (!gameOver) { // Verificar si el juego ya ha terminado para evitar guardar múltiples veces
+        gameOver = true;
+
+        // Guardar resultado de la partida
+        var currentDate = new Date();
+        var gameResult = {
+            playerName: playerName,
+            score: score,
+            dateTime: currentDate.toLocaleString()
+        };
+
+        // Agregar el nuevo resultado al arreglo de resultados
+        gameResults.push(gameResult);
+
+        // Guardar los resultados actualizados en LocalStorage
+        localStorage.setItem("gameResults", JSON.stringify(gameResults));
+
+        // Actualizar los resultados ordenados y mostrar el modal
+        sortedResults = gameResults.slice(0); // Copia los resultados para no modificar el original directamente
+        openResultsModal();
+    }
 }
 
 // Función para validar palabra usando la API del DLE
@@ -146,13 +226,13 @@ document.addEventListener("keypress", function(event) {
 
 function validateWord() {
     if (currentWord.length < 3) {
-        alert("La palabra debe tener al menos 3 letras.");
+        showMessageModal("La palabra debe tener al menos 3 letras.");
         resetCurrentWord();
         return;
     }
 
     if (foundWords.includes(currentWord)) {
-        alert("La palabra ya ha sido encontrada.");
+        showMessageModal("La palabra ya ha sido encontrada.");
         resetCurrentWord();
         return;
     }
@@ -163,7 +243,7 @@ function validateWord() {
             updateScore(currentWord);
             document.getElementById("found-words").textContent = "Palabras encontradas: " + foundWords.join(", ");
         } else {
-            alert("La palabra no es válida.");
+            showMessageModal("La palabra no es válida.");
             // Penalización
             score -= 1;
             document.getElementById("score").textContent = "Puntaje: " + score;
@@ -171,6 +251,7 @@ function validateWord() {
         resetCurrentWord();
     });
 }
+
 
 function resetCurrentWord() {
     currentWord = "";
@@ -181,6 +262,8 @@ function resetCurrentWord() {
     cells.forEach(function(cell) {
         cell.classList.remove("selected", "last-selected", "current-selected");
     });
+
+    updateCellColors();
 }
 
 function updateScore(word) {
@@ -194,3 +277,158 @@ function updateScore(word) {
     score += points;
     document.getElementById("score").textContent = "Puntaje: " + score;
 }
+
+
+
+
+// Función para mostrar el modal de mensajes
+function showMessageModal(message) {
+    var modal = document.getElementById("message-modal");
+    var messageText = document.getElementById("message-text");
+    var closeButton = document.getElementById("close-message-modal");
+
+    messageText.textContent = message;
+    modal.style.display = "block";
+
+    closeButton.onclick = function() {
+        modal.style.display = "none";
+    };
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    };
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+
+
+
+// Variables globales para mantener el estado del ordenamiento
+var currentSortField = null;
+var isAscending = true;
+
+// Recuperar resultados del LocalStorage
+var gameResults = JSON.parse(localStorage.getItem("gameResults")) || [];
+var sortedResults = gameResults.slice(0); // Copia los resultados para no modificar el original directamente
+var tableBody = document.getElementById("results-table");
+
+// Función para llenar la tabla con los resultados
+function fillTable(results) {
+    tableBody.innerHTML = "";
+
+    results.forEach(function(result) {
+        var row = document.createElement("tr");
+        row.innerHTML = "<td>" + result.playerName + "</td>" +
+                        "<td class='score'>" + result.score + "</td>" +
+                        "<td class='dateTime'>" + result.dateTime + "</td>";
+        tableBody.appendChild(row);
+    });
+}
+
+
+
+
+// Asignar eventos al botón de Ranking en el header y al botón de Volver al inicio en el modal
+document.getElementById("button").addEventListener("click", openResultsModal);
+document.getElementById("close-modal").addEventListener("click", closeModal);
+
+// Función para volver al inicio
+function goToHome() {
+    window.location.href = "index.html"; // Reemplazar con el nombre de tu página inicial
+}
+
+
+function sortTable(field) {
+    // Si se hace clic en el mismo campo de ordenamiento, alternar entre ascendente y descendente
+    if (currentSortField === field) {
+        isAscending = !isAscending; // Cambia el tipo de orden
+    } else {
+        currentSortField = field; // Establece el nuevo campo de ordenamiento
+        isAscending = true; // Por defecto, comienza con orden ascendente
+    }
+
+    // Ordena los resultados según el campo y tipo de ordenamiento actual
+    if (field === 'score') {
+        sortedResults.sort(function(a, b) {
+            return isAscending ? a.score - b.score : b.score - a.score;
+        });
+    } else if (field === 'dateTime') {
+        sortedResults.sort(function(a, b) {
+            var dateA = parseDate(a.dateTime);
+            var dateB = parseDate(b.dateTime);
+            var comparison = dateA - dateB;
+            return isAscending ? comparison : -comparison;
+        });
+    }
+
+    // Llena la tabla con los resultados ordenados
+    fillTable(sortedResults);
+}
+
+// Función para parsear la fecha en el formato correcto
+function parseDate(dateTimeString) {
+    var parts = dateTimeString.split(", ");
+    var dateParts = parts[0].split("/");
+    var timeParts = parts[1].split(":");
+    return new Date(
+        dateParts[2],    // Año
+        dateParts[1] - 1, // Mes (0-indexed en JavaScript)
+        dateParts[0],    // Día
+        timeParts[0],    // Hora
+        timeParts[1],    // Minuto
+        timeParts[2]     // Segundo
+    );
+}
+
+
+
+// Función para abrir el modal de resultados
+function openResultsModal() {
+    var modal = document.getElementById("game-over-modal");
+    modal.style.display = "block";
+
+    // Recuperar resultados del LocalStorage
+    gameResults = JSON.parse(localStorage.getItem("gameResults")) || [];
+    sortedResults = gameResults.slice(0); // Copia los resultados para no modificar el original directamente
+
+    // Llenar la tabla con los resultados almacenados
+    fillTable(sortedResults);
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    };
+}
+// Función para cerrar el modal
+function closeModal() {
+    var modal = document.getElementById("game-over-modal");
+    modal.style.display = "none";
+}
+
+
+
+
+
+
+
+
+
+
+
+
