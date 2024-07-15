@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados del Juego</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Resultados del Juego</h1>
+    <button onclick="goToHome()">Volver al inicio</button>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre del Jugador</th>
+                <th>Puntaje</th>
+                <th>Fecha y Hora</th>
+            </tr>
+        </thead>
+        <tbody id="results-table">
+            <!-- Aquí se llenará la tabla con JavaScript -->
+        </tbody>
+    </table>
+
+    <script>
+        // Recuperar resultados del LocalStorage
+        var gameResults = JSON.parse(localStorage.getItem("gameResults")) || [];
+        var tableBody = document.getElementById("results-table");
+
+        // Llenar la tabla con los resultados almacenados
+        gameResults.forEach(function(result) {
+            var row = document.createElement("tr");
+            row.innerHTML = "<td>" + result.playerName + "</td>" +
+                            "<td>" + result.score + "</td>" +
+                            "<td>" + result.dateTime + "</td>";
+            tableBody.appendChild(row);
+        });
+
+        // Función para volver al inicio
+        function goToHome() {
+            window.location.href = "index.html"; // Reemplaza con el nombre de tu página inicial
+        }
+    </script>
+</body>
+</html>
