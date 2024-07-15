@@ -6,13 +6,14 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background-color: #f0f0f0;
+    background-color: #0a353f;
+    color: #333;
 }
 
 .container {
@@ -23,50 +24,84 @@ body {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    max-width: 800px; /* Ajusta el ancho máximo según sea necesario */
-    margin: 20px;
+    max-width: 800px;
+    width: 100%;
 }
 
 header {
-    margin-bottom: 20px;
-}
-
-#player-info {
-    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
     margin-bottom: 20px;
+    background-color: #019090;
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
 }
 
-#player-name {
+header h1 {
+    font-size: 2em;
+}
+
+header input {
     padding: 8px;
     font-size: 16px;
-    border: 1px solid #ccc;
+    border: none;
     border-radius: 5px;
     width: 200px;
+}
+
+main{
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: center;
+}
+
+section{
+    width: 50%;
+}
+
+.info-bar {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
 #start-game {
     padding: 8px 16px;
     font-size: 16px;
     cursor: pointer;
-    background-color: #4CAF50;
+    background-color: #019090;
     color: white;
     border: none;
     border-radius: 5px;
 }
 
 #start-game:hover {
-    background-color: #45a049;
+    background-color: #71d6d6;
 }
 
-main {
+#timer-select {
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.game-area {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: flex-start;
     width: 100%;
-    margin-bottom: 20px;
+    margin: 8px 0px;
 }
 
 #board {
@@ -82,39 +117,73 @@ main {
     justify-content: center;
     width: 50px;
     height: 50px;
-    border: 1px solid #000000;
+    border: 1px solid #000;
     border-radius: 5px;
     font-size: 24px;
     font-weight: bold;
+    background-color: #eee;
 }
 
-#current-word, #found-words, #timer, #score {
-    margin: 10px 0;
+.board div:hover {
+    background-color: #ddd;
 }
 
-#timer-select {
-    padding: 8px;
-    font-size: 16px;
-    border-radius: 5px;
+.adjacent {
+    background-color: #afffaf !important;
 }
 
-aside#word-list {
+.non-adjacent {
+    background-color: #a2a2a2 !important;
+}
+
+section#word-list {
     width: 200px;
     padding: 10px;
     background-color: #f0f0f0;
     border: 1px solid #ccc;
     border-radius: 5px;
+    margin-left: 40px;
 }
 
 #word-list h2 {
     margin-bottom: 10px;
     font-size: 18px;
+    color: #019090;
 }
 
 #found-words {
     margin-top: 10px;
     line-height: 1.5;
 }
+
+
+
+
+#button, #contact-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #019090;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+}
+
+#button:hover, #contact-button:hover {
+    background-color: #71d6d6;
+}
+
+#contact-button {
+    margin-top: 10px;
+}
+
+#board > div.board-cell.selected.last-selected {
+    border: 4px solid #f00; 
+    border-radius: 5px; 
+}
+
 
 .modal {
     display: none;
@@ -125,44 +194,36 @@ aside#word-list {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: #000000;
-    background-color: #00000066;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
+    background-color: #fff;
+    margin: 2% auto;
     padding: 20px;
-    border: 1px solid #888888;
+    border: 1px solid #888;
     width: 80%;
+    border-radius: 10px;
+    height: auto;
 }
 
+
 .close {
-    color: #aaaaaa;
+    color: #aaa;
     float: right;
-    font-size: 28px;
+    font-size: 35px;
     font-weight: bold;
 }
 
 .close:hover,
 .close:focus {
-    color: #000000;
+    color: #000;
     text-decoration: none;
     cursor: pointer;
 }
 
-.adjacent {
-    background-color: green;
+#message-text{
+    font-family: cursive;
+    font-size: 20px;
+    text-align: center;
 }
-
-.non-adjacent {
-    background-color: gray;
-}
-
-
-
-#board > div.board-cell.selected.last-selected {
-    border: 4px solid #f00; 
-    border-radius: 5px; 
-}
-

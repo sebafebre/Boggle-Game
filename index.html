@@ -11,30 +11,47 @@
     <div class="container">
         <header>
             <h1>Boggle</h1>
+            <input type="text" id="player-name" placeholder="Nombre del jugador" required>
         </header>
         <main>
-            <input type="text" id="player-name" placeholder="Nombre del jugador" required>
-            <button id="start-game">Iniciar Juego</button>
-            <div id="board" class="board"></div>
-            <div id="current-word"></div>
-            <div id="found-words"></div>
-            <div id="score">Puntaje: 0</div>
-            <div id="timer"></div>
-            <select id="timer-select">
-                <option value="1">1 minuto</option>
-                <option value="2">2 minutos</option>
-                <option value="3">3 minutos</option>
-            </select>
+            <section>
+                <div class="info-bar">
+                    <button id="start-game">Iniciar Juego</button>
+                    <select id="timer-select">
+                        <option value="1">1 minuto</option>
+                        <option value="2">2 minutos</option>
+                        <option value="3">3 minutos</option>
+                    </select>
+                    <div id="timer"></div>
+                </div>
+                <div class="info-bar">
+                    <div id="score">Puntaje: 0</div>
+                </div>
+                <div class="info-bar">
+                    <div>Palabra actual:</div>
+                    <div id="current-word"></div>
+                </div>
+                <div class="game-area">
+                    <div id="board" class="board"></div>
+                    
+                </div>
+                <button id="contact-button" onclick="window.location.href='contacto.html'">Contacto</button>
+            </section>
+            <section id="word-list">
+                <h2>Palabras Formadas</h2>
+                <div id="found-words"></div>
+            </section>
         </main>
     </div>
-    <div id="game-over-modal" class="modal">
-        <div class="modal-content">
-            <span id="close-modal" class="close">&times;</span>
-            <p>¡Tiempo terminado!</p>
-            <p id="final-score"></p>
-            <p id="final-words"></p>
+
+    <div id="message-modal" class="modal">
+        <div id="modal-content-message" class="modal-content">
+            <span id="close-message-modal" class="close">&times;</span>
+            <p id="message-text"></p>
         </div>
     </div>
+
+
     <script src="js/main.js"></script>
 </body>
 </html>
