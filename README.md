@@ -51,13 +51,14 @@ Sebastian.Febre@alumnos.uai.edu.ar y Tomas.Pascual@alumnos.uai.edu.ar
 
 ## Link para jugar
 
-Dario.Marañe@uai.edu.ar
+https://tomi-pascual.github.io/TP-Final-DAW/
+
+## Link del Repositorio:
+
+https://github.com/Tomi-Pascual/TP-Final-DAW/tree/master
 
 Integrantes del equipo:
- 1- 
- 2-
+ 1- Febre Sebastian
+ 2- Pascual Tomás
 
-Link Repo
-
-Link Github Pages (primer instancia de que ande)
 
