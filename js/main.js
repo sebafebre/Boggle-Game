@@ -1,9 +1,9 @@
 "use strict";
 
-// Variables globales
 var board, currentWord, foundWords, timer, score, timerInterval, playerName;
 var selectedLetters = [];
 var gameOver = false;
+
 // Inicialización del juego
 document.getElementById("start-game").addEventListener("click", function() {
     playerName = document.getElementById("player-name").value;
@@ -20,22 +20,20 @@ document.getElementById("start-game").addEventListener("click", function() {
 });
 
 function initGame() {
-    // Inicializar variables
     board = generateBoard();
     currentWord = "";
     foundWords = [];
     score = 0;
     selectedLetters = [];
-    var gameOver = false;
+    gameOver = false;
 
-    // Mostrar el tablero
     displayBoard();
 
     // Iniciar el temporizador
     var timerDuration = parseInt(document.getElementById("timer-select").value) * 60;
     // Obtener el elemento donde se mostrará el temporizador
-    var timerDisplay = document.getElementById("timer"); // Asegúrate de tener un elemento con ID "timer" en tu HTML
-
+    var timerDisplay = document.getElementById("timer");
+    
     // Iniciar el temporizador y almacenar el intervalo en timerInterval
     timerInterval = startTimer(timerDuration, timerDisplay);
 
@@ -138,17 +136,14 @@ function startTimer(duration, display) {
         minutes = minutes < 10 ? "0" + minutes : minutes;
         seconds = seconds < 10 ? "0" + seconds : seconds;
 
-        // Actualizar el texto del temporizador en el elemento display
         display.textContent = minutes + ":" + seconds;
 
-        // Cambiar el color del temporizador a rojo cuando llegue a 10 segundos o menos
         if (timer <= 10) {
-            display.style.color = "#ff0000"; // Color rojo
+            display.style.color = "#ff0000"; // rojo
         } else {
-            display.style.color = "#000000"; // Color predeterminado (negro)
+            display.style.color = "#000000"; //negro
         }
 
-        // Finalizar el juego cuando el temporizador llegue a cero
         if (--timer < 0) {
             clearInterval(timerInterval);
             display.textContent = "00:00";
@@ -176,7 +171,6 @@ function endGame() {
     if (!gameOver) { // Verificar si el juego ya ha terminado para evitar guardar múltiples veces
         gameOver = true;
 
-        // Guardar resultado de la partida
         var currentDate = new Date();
         var gameResult = {
             playerName: playerName,
@@ -184,15 +178,12 @@ function endGame() {
             dateTime: currentDate.toLocaleString()
         };
 
-        // Agregar el nuevo resultado al arreglo de resultados
         gameResults.push(gameResult);
 
-        // Guardar los resultados actualizados en LocalStorage
         localStorage.setItem("gameResults", JSON.stringify(gameResults));
-
-        // Actualizar los resultados ordenados y mostrar el modal
-        sortedResults = gameResults.slice(0); // Copia los resultados para no modificar el original directamente
-        openResultsModal();
+ 
+        sortedResults = gameResults.slice(0); 
+        showGameOverModal(score);
     }
 }
 
@@ -281,7 +272,10 @@ function updateScore(word) {
 
 
 
-// Función para mostrar el modal de mensajes
+
+/* --> Modales <-- */
+
+
 function showMessageModal(message) {
     var modal = document.getElementById("message-modal");
     var messageText = document.getElementById("message-text");
@@ -299,35 +293,40 @@ function showMessageModal(message) {
             modal.style.display = "none";
         }
     };
-
 }
 
 
 
+function openResultsModal() {
+    var modal = document.getElementById("ranking-modal");
+    modal.style.display = "block";
+
+    gameResults = JSON.parse(localStorage.getItem("gameResults")) || [];
+    sortedResults = gameResults.slice(0);
+    var closeButton = document.getElementById("close-ranking-modal");
+
+    fillTable(sortedResults);
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    };
+
+    closeButton.onclick = function() {
+        modal.style.display = "none";
+        window.onkeydown = null;
+    };
+}
 
 
-
-
-
-
-
-
-
-
-//
-
-
-
-// Variables globales para mantener el estado del ordenamiento
 var currentSortField = null;
 var isAscending = true;
 
-// Recuperar resultados del LocalStorage
 var gameResults = JSON.parse(localStorage.getItem("gameResults")) || [];
-var sortedResults = gameResults.slice(0); // Copia los resultados para no modificar el original directamente
+var sortedResults = gameResults.slice(0); 
 var tableBody = document.getElementById("results-table");
 
-// Función para llenar la tabla con los resultados
 function fillTable(results) {
     tableBody.innerHTML = "";
 
@@ -340,29 +339,23 @@ function fillTable(results) {
     });
 }
 
-
-
-
-// Asignar eventos al botón de Ranking en el header y al botón de Volver al inicio en el modal
 document.getElementById("button").addEventListener("click", openResultsModal);
-document.getElementById("close-modal").addEventListener("click", closeModal);
 
-// Función para volver al inicio
+
+
 function goToHome() {
-    window.location.href = "index.html"; // Reemplazar con el nombre de tu página inicial
+    window.location.href = "index.html"; 
 }
 
-
 function sortTable(field) {
-    // Si se hace clic en el mismo campo de ordenamiento, alternar entre ascendente y descendente
+    
     if (currentSortField === field) {
-        isAscending = !isAscending; // Cambia el tipo de orden
+        isAscending = !isAscending; 
     } else {
-        currentSortField = field; // Establece el nuevo campo de ordenamiento
-        isAscending = true; // Por defecto, comienza con orden ascendente
+        currentSortField = field; 
+        isAscending = true; 
     }
 
-    // Ordena los resultados según el campo y tipo de ordenamiento actual
     if (field === 'score') {
         sortedResults.sort(function(a, b) {
             return isAscending ? a.score - b.score : b.score - a.score;
@@ -376,7 +369,6 @@ function sortTable(field) {
         });
     }
 
-    // Llena la tabla con los resultados ordenados
     fillTable(sortedResults);
 }
 
@@ -397,29 +389,48 @@ function parseDate(dateTimeString) {
 
 
 
-// Función para abrir el modal de resultados
-function openResultsModal() {
+
+
+function showGameOverModal(score) {
     var modal = document.getElementById("game-over-modal");
+    var scoreText = document.getElementById("game-over-score");
+    var foundWordsContainer = document.getElementById("found-words-list");
+    var closeButton = document.getElementById("close-game-over-modal");
+    var restartButton = document.getElementById("restart-game");
+
+    console.log("Palabras encontradas al finalizar el juego:", foundWords);
+
+    scoreText.textContent = `Tu puntaje fue: ${score}`;
+    
+    foundWordsContainer.innerHTML = ""; 
+    foundWords.forEach(function(word) {
+        var wordElement = document.createElement("div");
+        wordElement.textContent = word; 
+        foundWordsContainer.appendChild(wordElement);
+    });
+
     modal.style.display = "block";
 
-    // Recuperar resultados del LocalStorage
-    gameResults = JSON.parse(localStorage.getItem("gameResults")) || [];
-    sortedResults = gameResults.slice(0); // Copia los resultados para no modificar el original directamente
-
-    // Llenar la tabla con los resultados almacenados
-    fillTable(sortedResults);
+    closeButton.onclick = function() {
+        modal.style.display = "none";
+        window.onkeydown = null;
+    };
 
     window.onclick = function(event) {
         if (event.target == modal) {
             modal.style.display = "none";
+            window.onkeydown = null;
         }
     };
+
+    restartButton.onclick = function() {
+        modal.style.display = "none";
+        initGame(); 
+    };
 }
-// Función para cerrar el modal
-function closeModal() {
-    var modal = document.getElementById("game-over-modal");
-    modal.style.display = "none";
-}
+
+
+
 
 
 

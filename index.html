@@ -12,7 +12,7 @@
         <header>
             <h1>Boggle</h1>
             <input type="text" id="player-name" placeholder="Nombre del jugador" required>
-            <button id="button" onclick="openResultsModal()">Ranking</button>  
+            <button id="button-ranking" class="button" onclick="openResultsModal()">Ranking</button>  
         </header>
         <main>
             <section>
@@ -34,7 +34,6 @@
                 </div>
                 <div class="game-area">
                     <div id="board" class="board"></div>
-                    
                 </div>
                 <button id="contact-button" onclick="window.location.href='contacto.html'">Contacto</button>
             </section>
@@ -52,9 +51,9 @@
         </div>
     </div>
 
-    <div id="game-over-modal" class="modal">
+    <div id="ranking-modal" class="modal">
         <div class="modal-content">
-            <span id="close-modal" class="close">&times;</span>
+            <span id="close-ranking-modal" class="close">&times;</span>
             <h1>Resultados del Juego</h1>
             <table>
                 <thead>
@@ -67,10 +66,22 @@
                 <tbody id="results-table">
                 </tbody>
             </table>
-            <button onclick="goToHome()">Volver al inicio</button>
+            <button id="button-back" onclick="goToHome()">Volver al inicio</button>
         </div>
     </div>
 
+    <div id="game-over-modal" class="modal">
+        <div class="modal-content">
+            <span id="close-game-over-modal" class="close">&times;</span>
+            <h1>Partida finalizada</h1>  
+            <p id="game-over-score"></p>
+            <div id="word-list">
+                <h2>Palabras Formadas</h2>
+                <div id="found-words-list"></div>
+            </div>
+            <button id="restart-game" class="modal-button">Jugar de nuevo</button>
+        </div>
+    </div>
     <script src="js/main.js"></script>
 </body>
 </html>
