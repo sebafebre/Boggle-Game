@@ -159,7 +159,7 @@ section#word-list {
 
 
 
-#button, #contact-button {
+button {
     padding: 10px 20px;
     font-size: 16px;
     background-color: #019090;
@@ -171,7 +171,7 @@ section#word-list {
     text-align: center;
 }
 
-#button:hover, #contact-button:hover {
+button:hover {
     background-color: #71d6d6;
 }
 
@@ -179,7 +179,7 @@ section#word-list {
     margin-top: 10px;
 }
 
-#board > div.board-cell.selected.last-selected {
+.board-cell.selected.last-selected {
     border: 4px solid #f00; 
     border-radius: 5px; 
 }
@@ -195,6 +195,7 @@ section#word-list {
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.5);
+    text-align: center;
 }
 
 .modal-content {
@@ -249,7 +250,7 @@ th {
 
 
 
-#game-over-modal button {
+#button-back {
     display: block;
     margin: 20px auto;
     padding: 10px 20px;
@@ -258,3 +259,40 @@ th {
     border: none;
     cursor: pointer;
 }
+
+#game-over-modal .modal-content {  
+    border-radius: 10px;
+    height: auto;
+    max-width: 600px;
+}
+
+#game-over-modal .modal-content h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#game-over-modal .modal-content p#game-over-score {
+    font-size: 18px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#game-over-modal .modal-content #word-list {
+    margin-top: 20px;
+}
+
+#game-over-modal .modal-content #word-list h2 {
+    font-size: 20px;
+    color: #019090;
+    margin-bottom: 10px;
+}
+
+#game-over-modal .modal-content #found-words-list {
+    font-size: 16px;
+    line-height: 1.5;
+    text-align: center;  
+    margin-bottom: 15px;
+}
+
+
+
