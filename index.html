@@ -12,7 +12,7 @@
         <header>
             <h1>Boggle</h1>
             <input type="text" id="player-name" placeholder="Nombre del jugador" required>
-            <button id="button" onclick="openResultsModal()">Ranking</button>  
+            <button id="button-ranking" class="button" onclick="openResultsModal()">Ranking</button>  
         </header>
         <main>
             <section>
@@ -34,7 +34,6 @@
                 </div>
                 <div class="game-area">
                     <div id="board" class="board"></div>
-                    
                 </div>
                 <button id="contact-button" onclick="window.location.href='contacto.html'">Contacto</button>
             </section>
@@ -43,6 +42,17 @@
                 <div id="found-words"></div>
             </section>
         </main>
+        <footer>
+            <p>Desarrollado por:  
+                <a href="https://github.com/Tomi-Pascual" target="_blank">Pascual Tomás</a> y 
+                <a href="https://github.com/sebafebre" target="_blank">Febre Sebastián</a>
+            </p>
+            <a href="https://github.com/Tomi-Pascual/TP-Final-DAW" target="_blank">
+                <svg width="24" height="24" fill="none"  xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 0C5.373 0 0 5.373 0 12c0 5.308 3.438 9.818 8.125 11.418.594.109.812-.263.812-.587v-2.075c-3.313.722-4.013-1.597-4.013-1.597-.543-1.379-1.325-1.743-1.325-1.743-1.084-.743.083-.727.083-.727 1.204.084 1.839 1.237 1.839 1.237 1.07 1.835 2.807 1.304 3.492.998.108-.775.418-1.304.761-1.604-2.666-.3-5.466-1.332-5.466-5.93 0-1.309.467-2.376 1.237-3.21-.124-.304-.537-1.527.117-3.177 0 0 1.005-.323 3.293 1.232.953-.266 1.979-.398 3.003-.403 1.02.005 2.049.136 3.002.403 2.286-1.556 3.29-1.232 3.29-1.232.657 1.65.244 2.873.12 3.177.773.834 1.236 1.901 1.236 3.21 0 4.608-2.806 5.623-5.478 5.921.43.372.816 1.102.816 2.22v3.293c0 .326.218.696.825.579C20.566 21.817 24 17.306 24 12 24 5.373 18.627 0 12 0z" fill="#fff"/>
+                </svg>
+            </a>
+        </footer>
     </div>
 
     <div id="message-modal" class="modal">
@@ -52,9 +62,9 @@
         </div>
     </div>
 
-    <div id="game-over-modal" class="modal">
+    <div id="ranking-modal" class="modal">
         <div class="modal-content">
-            <span id="close-modal" class="close">&times;</span>
+            <span id="close-ranking-modal" class="close">&times;</span>
             <h1>Resultados del Juego</h1>
             <table>
                 <thead>
@@ -67,10 +77,22 @@
                 <tbody id="results-table">
                 </tbody>
             </table>
-            <button onclick="goToHome()">Volver al inicio</button>
+            <button id="button-back" onclick="goToHome()">Volver al inicio</button>
         </div>
     </div>
 
+    <div id="game-over-modal" class="modal">
+        <div class="modal-content">
+            <span id="close-game-over-modal" class="close">&times;</span>
+            <h1>Partida finalizada</h1>  
+            <p id="game-over-score"></p>
+            <div id="word-list">
+                <h2>Palabras Formadas</h2>
+                <div id="found-words-list"></div>
+            </div>
+            <button id="restart-game" class="modal-button">Jugar de nuevo</button>
+        </div>
+    </div>
     <script src="js/main.js"></script>
 </body>
 </html>
