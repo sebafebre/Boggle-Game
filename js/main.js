@@ -70,7 +70,26 @@ function displayBoard() {
 
 function selectLetter(event) {
     var index = parseInt(event.target.dataset.index);
-    if (selectedLetters.includes(index)) return;
+
+    // Si la letra ya está seleccionada, se deselecciona
+    if (selectedLetters.includes(index)) {
+        var lastSelectedIndex = selectedLetters[selectedLetters.length - 1];
+        if (index === lastSelectedIndex) {
+            // Deseleccionar la letra
+            selectedLetters.pop();
+            currentWord = currentWord.slice(0, -1);
+            document.getElementById("current-word").textContent = currentWord;
+            event.target.classList.remove("selected", "last-selected");
+            
+            // Marcar la nueva última letra seleccionada
+            if (selectedLetters.length > 0) {
+                var newLastSelectedIndex = selectedLetters[selectedLetters.length - 1];
+                document.querySelector('[data-index="' + newLastSelectedIndex + '"]').classList.add("last-selected");
+            }
+            updateCellColors();
+            return;
+        }
+    }
 
     // Validar si la letra es contigua a la última seleccionada
     if (selectedLetters.length > 0) {
@@ -96,6 +115,7 @@ function selectLetter(event) {
 
     updateCellColors();
 }
+
 
 function updateCellColors() {
     var cells = document.querySelectorAll("#board div");
