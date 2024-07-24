@@ -11,16 +11,15 @@ document.getElementById("start-game").addEventListener("click", function() {
         showMessageModal("El nombre del jugador debe tener al menos 3 letras.");
         return;
     }
-
     if (timerInterval) {
         clearInterval(timerInterval);
     }
-
     initGame();
 });
 
 function initGame() {
-    board = generateBoard();
+    // Inicializar variables
+    board = generateBoardWithVowels();
     currentWord = "";
     foundWords = [];
     score = 0;
@@ -32,8 +31,8 @@ function initGame() {
     // Iniciar el temporizador
     var timerDuration = parseInt(document.getElementById("timer-select").value) * 60;
     // Obtener el elemento donde se mostrará el temporizador
-    var timerDisplay = document.getElementById("timer");
-    
+    var timerDisplay = document.getElementById("timer"); // Asegúrate de tener un elemento con ID "timer" en tu HTML
+
     // Iniciar el temporizador y almacenar el intervalo en timerInterval
     timerInterval = startTimer(timerDuration, timerDisplay);
 
@@ -43,16 +42,42 @@ function initGame() {
     document.getElementById("current-word").textContent = "";
 }
 
-function generateBoard() {
+function generateBoardWithVowels() {
     var letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    var vowels = "AEIOU";
     var board = [];
-    for (var i = 0; i < 16; i++) {
+    
+    // Insertar al menos 4 vocales en posiciones aleatorias
+    for (var i = 0; i < 4; i++) {
+        var randomIndex = Math.floor(Math.random() * (16 - i));
+        var randomVowel = vowels.charAt(Math.floor(Math.random() * vowels.length));
+        board.splice(randomIndex, 0, randomVowel);
+    }
+
+    // Rellenar el resto del tablero con letras aleatorias
+    for (var i = board.length; i < 16; i++) {
         var randomLetter = letters.charAt(Math.floor(Math.random() * letters.length));
         board.push(randomLetter);
     }
+
+    // Mezclar el tablero para distribuir las vocales
+    board = shuffleArray(board);
+
     return board;
 }
 
+function shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    return array;
+}
+
+
+//Función para mostrar el tablero
 function displayBoard() {
     var boardContainer = document.getElementById("board");
     boardContainer.innerHTML = "";
@@ -68,7 +93,26 @@ function displayBoard() {
 
 function selectLetter(event) {
     var index = parseInt(event.target.dataset.index);
-    if (selectedLetters.includes(index)) return;
+
+    // Si la letra ya está seleccionada, se deselecciona
+    if (selectedLetters.includes(index)) {
+        var lastSelectedIndex = selectedLetters[selectedLetters.length - 1];
+        if (index === lastSelectedIndex) {
+            // Deseleccionar la letra
+            selectedLetters.pop();
+            currentWord = currentWord.slice(0, -1);
+            document.getElementById("current-word").textContent = currentWord;
+            event.target.classList.remove("selected", "last-selected");
+            
+            // Marcar la nueva última letra seleccionada
+            if (selectedLetters.length > 0) {
+                var newLastSelectedIndex = selectedLetters[selectedLetters.length - 1];
+                document.querySelector('[data-index="' + newLastSelectedIndex + '"]').classList.add("last-selected");
+            }
+            updateCellColors();
+            return;
+        }
+    }
 
     // Validar si la letra es contigua a la última seleccionada
     if (selectedLetters.length > 0) {
@@ -94,6 +138,7 @@ function selectLetter(event) {
 
     updateCellColors();
 }
+
 
 function updateCellColors() {
     var cells = document.querySelectorAll("#board div");
@@ -270,9 +315,6 @@ function updateScore(word) {
 }
 
 
-
-
-
 /* --> Modales <-- */
 
 
@@ -294,8 +336,6 @@ function showMessageModal(message) {
         }
     };
 }
-
-
 
 function openResultsModal() {
     var modal = document.getElementById("ranking-modal");
@@ -340,7 +380,6 @@ function fillTable(results) {
 }
 
 document.getElementById("button").addEventListener("click", openResultsModal);
-
 
 
 function goToHome() {
@@ -388,9 +427,6 @@ function parseDate(dateTimeString) {
 }
 
 
-
-
-
 function showGameOverModal(score) {
     var modal = document.getElementById("game-over-modal");
     var scoreText = document.getElementById("game-over-score");
@@ -428,18 +464,3 @@ function showGameOverModal(score) {
         initGame(); 
     };
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
