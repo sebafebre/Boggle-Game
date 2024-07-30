@@ -6,14 +6,15 @@
 }
 
 body {
-    font-family: 'Arial', sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100vh;
+    margin-top: 1rem;
     background-color: #0a353f;
     color: #333;
+    font-family: 'Arial', sans-serif;
 }
 
 .container {
@@ -37,7 +38,7 @@ header {
     background-color: #019090;
     padding: 20px;
     border-radius: 10px;
-    color: white;
+    color: #ffffff;
 }
 
 header h1 {
@@ -52,14 +53,14 @@ header input {
     width: 200px;
 }
 
-main{
+main {
     display: flex;
     width: 100%;
     flex-direction: row;
     justify-content: center;
 }
 
-section{
+section {
     width: 50%;
 }
 
@@ -71,7 +72,7 @@ section{
     margin-bottom: 20px;
     padding: 10px;
     background-color: #f9f9f9;
-    border: 1px solid #ccc;
+    border: 1px solid #cccccc;
     border-radius: 5px;
 }
 
@@ -80,7 +81,7 @@ section{
     font-size: 16px;
     cursor: pointer;
     background-color: #019090;
-    color: white;
+    color: #ffffff;
     border: none;
     border-radius: 5px;
 }
@@ -93,7 +94,7 @@ section{
     padding: 8px;
     font-size: 16px;
     border-radius: 5px;
-    border: 1px solid #ccc;
+    border: 1px solid #cccccc;
 }
 
 .game-area {
@@ -105,9 +106,10 @@ section{
 }
 
 #board {
-    display: grid;
-    grid-template-columns: repeat(4, 50px);
-    grid-template-rows: repeat(4, 50px);
+    display: flex;
+    flex-wrap: wrap;
+    width: 220px;
+    height: 220px;
     gap: 5px;
 }
 
@@ -117,15 +119,15 @@ section{
     justify-content: center;
     width: 50px;
     height: 50px;
-    border: 1px solid #000;
+    border: 1px solid #000000;
     border-radius: 5px;
     font-size: 24px;
     font-weight: bold;
-    background-color: #eee;
+    background-color: #eeeeee;
 }
 
 .board div:hover {
-    background-color: #ddd;
+    background-color: #dddddd;
 }
 
 .adjacent {
@@ -140,7 +142,7 @@ section#word-list {
     width: 200px;
     padding: 10px;
     background-color: #f0f0f0;
-    border: 1px solid #ccc;
+    border: 1px solid #cccccc;
     border-radius: 5px;
     margin-left: 40px;
 }
@@ -156,14 +158,11 @@ section#word-list {
     line-height: 1.5;
 }
 
-
-
-
 button {
     padding: 10px 20px;
     font-size: 16px;
     background-color: #019090;
-    color: white;
+    color: #ffffff;
     text-decoration: none;
     border-radius: 5px;
     border: none;
@@ -179,46 +178,39 @@ button:hover {
     margin-top: 10px;
 }
 
-
 .board-cell.selected.last-selected {
-    border: 4px solid #f00; 
-    border-radius: 5px; 
+    border: 4px solid #ff0000;
+    border-radius: 5px;
 }
 
-
-
 footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     margin-top: 20px;
     text-align: center;
     background-color: #019090;
     width: 100%;
     border-radius: 10px;
-    color: #ddd;
+    color: #dddddd;
     padding: 5px 25px;
-    font-family: Arial, sans-serif;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    font-family: 'Arial', sans-serif;
 }
 
-
 footer p {
-    margin: 0; 
-    font-size: 14px; 
-    color: #fff;
+    margin: 0;
+    font-size: 14px;
+    color: #ffffff;
 }
 
 footer a {
-    color: #fff; 
-    text-decoration: none; 
+    color: #ffffff;
+    text-decoration: none;
 }
 
 footer a:hover {
-    text-decoration: underline; 
+    text-decoration: underline;
 }
-
-
-
 
 .modal {
     display: none;
@@ -234,18 +226,17 @@ footer a:hover {
 }
 
 .modal-content {
-    background-color: #fff;
+    background-color: #ffffff;
     margin: 2% auto;
     padding: 20px;
-    border: 1px solid #888;
+    border: 1px solid #888888;
     width: 80%;
     border-radius: 10px;
     height: auto;
 }
 
-
 .close {
-    color: #aaa;
+    color: #aaaaaa;
     float: right;
     font-size: 35px;
     font-weight: bold;
@@ -253,28 +244,27 @@ footer a:hover {
 
 .close:hover,
 .close:focus {
-    color: #000;
+    color: #000000;
     text-decoration: none;
     cursor: pointer;
 }
 
-#message-text{
+#message-text {
     font-family: cursive;
     font-size: 20px;
     text-align: center;
 }
 
-
 table {
     width: 80%;
     margin: 20px auto;
     border-collapse: collapse;
-    background-color: #fff;
+    background-color: #ffffff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 th, td {
-    border: 1px solid #ddd;
+    border: 1px solid #dddddd;
     padding: 10px;
     text-align: center;
 }
@@ -283,19 +273,17 @@ th {
     background-color: #f2f2f2;
 }
 
-
-
 #button-back {
     display: block;
     margin: 20px auto;
     padding: 10px 20px;
     background-color: #019090;
-    color: white;
+    color: #ffffff;
     border: none;
     cursor: pointer;
 }
 
-#game-over-modal .modal-content {  
+#game-over-modal .modal-content {
     border-radius: 10px;
     height: auto;
     max-width: 600px;
@@ -325,9 +313,64 @@ th {
 #game-over-modal .modal-content #found-words-list {
     font-size: 16px;
     line-height: 1.5;
-    text-align: center;  
+    text-align: center;
     margin-bottom: 15px;
 }
 
+/* Media Queries */
+@media (max-width: 768px) {
+    body {
+        padding: 1rem;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
 
+    .container {
+        width: 100%;
+        padding: 10px;
+    }
 
+    header {
+        flex-direction: column;
+    }
+
+    h1 {
+        margin-bottom: 5px;
+    }
+
+    main {
+        flex-direction: column;
+    }
+
+    section {
+        width: 100%;
+    }
+
+    .info-bar {
+        flex-direction: column;
+    }
+
+    #start-game {
+        margin-bottom: 5px;
+    }
+
+    #timer-select {
+        margin-bottom: 5px;
+    }
+
+    #board {
+        width: 180px;
+        height: 180px;
+        gap: 5px;
+    }
+
+    .board div {
+        width: 40px;
+        height: 40px;
+    }
+
+    #word-list {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+}
