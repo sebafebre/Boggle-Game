@@ -245,12 +245,6 @@ function isValidWord(word, callback) {
     xhr.send();
 }
 
-// Validar palabra y actualizar puntaje
-document.addEventListener("keypress", function(event) {
-    if (event.key === "Enter") {
-        validateWord();
-    }
-});
 
 function validateWord() {
     if (currentWord.length < 3) {
@@ -279,6 +273,15 @@ function validateWord() {
         resetCurrentWord();
     });
 }
+
+// Validar palabra y actualizar puntaje
+document.addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        validateWord();
+    }
+});
+
+document.getElementById("validate-word-button").addEventListener("click", validateWord);
 
 // Funcion para resetear la palabra
 function resetCurrentWord() {
