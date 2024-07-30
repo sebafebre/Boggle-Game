@@ -204,14 +204,6 @@ function displayTimer() {
     document.getElementById("timer").textContent = minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
 }
 
-/*
-function endGame() {
-    alert("¡Tiempo terminado!");
-    // Mostrar puntaje final y palabras encontradas
-    document.getElementById("score").textContent = "Puntaje: " + score;
-    document.getElementById("found-words").textContent = "Palabras encontradas: " + foundWords.join(", ");
-}*/
-
 function endGame() {
     if (!gameOver) { // Verificar si el juego ya ha terminado para evitar guardar múltiples veces
         gameOver = true;
@@ -288,7 +280,7 @@ function validateWord() {
     });
 }
 
-
+// Funcion para resetear la palabra
 function resetCurrentWord() {
     currentWord = "";
     selectedLetters = [];
