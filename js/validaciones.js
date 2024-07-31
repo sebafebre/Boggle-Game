@@ -28,3 +28,4 @@ function validateContactForm(name, email, message) {
     return true;
 }
 
+
