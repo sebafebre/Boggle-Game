@@ -15,6 +15,11 @@ header {
     margin-bottom: 20px;
 }
 
+main{
+    display: flex;
+    flex-direction: column;
+}
+
 form {
     display: flex;
     flex-direction: column;

@@ -7,22 +7,22 @@ document.getElementById("contact-form").addEventListener("submit", function(even
     var message = document.getElementById("contact-message").value;
 
     if (validateContactForm(name, email, message)) {
-        this.submit();
+        sendEmail(name,email,message);
     }
 });
 
 function validateContactForm(name, email, message) {
     var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     if (name.length < 3) {
-        alert("El nombre debe tener al menos 3 letras.");
+        showMessageModal("El nombre debe tener al menos 3 letras.");
         return false;
     }
     if (!emailPattern.test(email)) {
-        alert("Por favor, ingresa un email válido.");
+        showMessageModal("Por favor, ingresa un email válido.");
         return false;
     }
     if (message.length < 5) {
-        alert("El mensaje debe tener al menos 5 caracteres.");
+        showMessageModal("El mensaje debe tener al menos 5 caracteres.");
         return false;
     }
     return true;

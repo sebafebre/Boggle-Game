@@ -14,7 +14,7 @@
             <h1>Contacto</h1>
         </header>
         <main>
-            <form id="contact-form" action="mailto:tomaspascual2002@gmail.com" method="post" enctype="text/plain">
+            <form id="contact-form"  method="post" enctype="text/plain">
                 <label for="contact-name">Nombre:</label>
                 <input type="text" id="contact-name" name="name" required>
                 <label for="contact-email">Email:</label>
@@ -28,6 +28,16 @@
             </div>
         </main>
     </div>
+
+    <div id="message-modal" class="modal">
+        <div id="modal-content-message" class="modal-content">
+            <span id="close-message-modal" class="close">&times;</span>
+            <p id="message-text"></p>
+        </div>
+    </div>
+
     <script src="js/validaciones.js"></script>
+    <script src="js/main.js"> </script>
+
 </body>
 </html>
