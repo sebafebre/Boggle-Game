@@ -28,10 +28,4 @@ function validateContactForm(name, email, message) {
     return true;
 }
 
-function sendEmail(name, email, message) {
-    var subject = "Mensaje de contacto desde la página web";
-    var body = "Nombre: " + name + "\nEmail: " + email + "\n\nMensaje:\n" + message;
-    var mailtoUrl = "mailto:sebafebre5@gmail.com?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
 
-    window.location.href = mailtoUrl;
-}
