@@ -4,7 +4,6 @@ var board, currentWord, foundWords, timer, score, timerInterval, playerName;
 var selectedLetters = [];
 var gameOver = false;
 
-// Inicialización del juego
 document.getElementById("start-game").addEventListener("click", function() {
     playerName = document.getElementById("player-name").value;
     if (playerName.length < 3) {
@@ -18,7 +17,6 @@ document.getElementById("start-game").addEventListener("click", function() {
 });
 
 function initGame() {
-    // Inicializar variables
     board = generateBoardWithVowels();
     currentWord = "";
     foundWords = [];
@@ -28,15 +26,11 @@ function initGame() {
 
     displayBoard();
 
-    // Iniciar el temporizador
     var timerDuration = parseInt(document.getElementById("timer-select").value) * 60;
-    // Obtener el elemento donde se mostrará el temporizador
-    var timerDisplay = document.getElementById("timer"); // Asegúrate de tener un elemento con ID "timer" en tu HTML
+    var timerDisplay = document.getElementById("timer"); 
 
-    // Iniciar el temporizador y almacenar el intervalo en timerInterval
     timerInterval = startTimer(timerDuration, timerDisplay);
 
-    // Limpiar el área de palabras encontradas y el puntaje
     document.getElementById("found-words").textContent = "";
     document.getElementById("score").textContent = "Puntaje: 0";
     document.getElementById("current-word").textContent = "";
@@ -47,20 +41,17 @@ function generateBoardWithVowels() {
     var vowels = "AEIOU";
     var board = [];
     
-    // Insertar al menos 4 vocales en posiciones aleatorias
     for (var i = 0; i < 4; i++) {
         var randomIndex = Math.floor(Math.random() * (16 - i));
         var randomVowel = vowels.charAt(Math.floor(Math.random() * vowels.length));
         board.splice(randomIndex, 0, randomVowel);
     }
 
-    // Rellenar el resto del tablero con letras aleatorias
     for (var i = board.length; i < 16; i++) {
         var randomLetter = letters.charAt(Math.floor(Math.random() * letters.length));
         board.push(randomLetter);
     }
 
-    // Mezclar el tablero para distribuir las vocales
     board = shuffleArray(board);
 
     return board;
@@ -77,7 +68,6 @@ function shuffleArray(array) {
 }
 
 
-//Función para mostrar el tablero
 function displayBoard() {
     var boardContainer = document.getElementById("board");
     boardContainer.innerHTML = "";
@@ -94,17 +84,15 @@ function displayBoard() {
 function selectLetter(event) {
     var index = parseInt(event.target.dataset.index);
 
-    // Si la letra ya está seleccionada, se deselecciona
     if (selectedLetters.includes(index)) {
         var lastSelectedIndex = selectedLetters[selectedLetters.length - 1];
         if (index === lastSelectedIndex) {
-            // Deseleccionar la letra
+
             selectedLetters.pop();
             currentWord = currentWord.slice(0, -1);
             document.getElementById("current-word").textContent = currentWord;
             event.target.classList.remove("selected", "last-selected");
             
-            // Marcar la nueva última letra seleccionada
             if (selectedLetters.length > 0) {
                 var newLastSelectedIndex = selectedLetters[selectedLetters.length - 1];
                 document.querySelector('[data-index="' + newLastSelectedIndex + '"]').classList.add("last-selected");
@@ -114,7 +102,6 @@ function selectLetter(event) {
         }
     }
 
-    // Validar si la letra es contigua a la última seleccionada
     if (selectedLetters.length > 0) {
         var lastSelectedIndex = selectedLetters[selectedLetters.length - 1];
         if (!isAdjacent(lastSelectedIndex, index)) return;
@@ -124,16 +111,13 @@ function selectLetter(event) {
     currentWord += board[index];
     document.getElementById("current-word").textContent = currentWord;
 
-    // Mostrar las letras seleccionadas en el tablero
     event.target.classList.add("selected");
 
-    // Quitar el borde especial de la letra anteriormente seleccionada
     var previousLastSelected = document.querySelector(".last-selected");
     if (previousLastSelected) {
         previousLastSelected.classList.remove("last-selected");
     }
 
-    // Agregar el borde especial a la última letra seleccionada
     event.target.classList.add("last-selected");
 
     updateCellColors();
@@ -205,7 +189,7 @@ function displayTimer() {
 }
 
 function endGame() {
-    if (!gameOver) { // Verificar si el juego ya ha terminado para evitar guardar múltiples veces
+    if (!gameOver) { 
         gameOver = true;
 
         var currentDate = new Date();
@@ -266,7 +250,6 @@ function validateWord() {
             document.getElementById("found-words").textContent = "Palabras encontradas: " + foundWords.join(", ");
         } else {
             showMessageModal("La palabra no es válida.");
-            // Penalización
             score -= 1;
             document.getElementById("score").textContent = "Puntaje: " + score;
         }
@@ -274,7 +257,6 @@ function validateWord() {
     });
 }
 
-// Validar palabra y actualizar puntaje
 document.addEventListener("keypress", function(event) {
     if (event.key === "Enter") {
         validateWord();
@@ -283,12 +265,10 @@ document.addEventListener("keypress", function(event) {
 
 document.getElementById("validate-word-button").addEventListener("click", validateWord);
 
-// Funcion para resetear la palabra
 function resetCurrentWord() {
     currentWord = "";
     selectedLetters = [];
     document.getElementById("current-word").textContent = "";
-    // Resetear colores de las letras seleccionadas
     var cells = document.querySelectorAll("#board div");
     cells.forEach(function(cell) {
         cell.classList.remove("selected", "last-selected", "current-selected");
