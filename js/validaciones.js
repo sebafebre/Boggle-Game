@@ -7,7 +7,7 @@ document.getElementById("contact-form").addEventListener("submit", function(even
     var message = document.getElementById("contact-message").value;
 
     if (validateContactForm(name, email, message)) {
-        this.submit();
+        sendEmail(name, email, message);
     }
 });
 
